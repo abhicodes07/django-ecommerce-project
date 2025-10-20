@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.template.defaultfilters import filesizeformat
 from django.urls import reverse
 
 # Create your models here.
@@ -45,6 +46,20 @@ class Product(models.Model):
     # build the dynamic url of the particular product
     def get_absolute_url(self):
         return reverse("store:product_detail", args=[self.slug])
+
+    def __str__(self):
+        return self.title
+
+
+# for background video or gif
+class Background(models.Model):
+    title = models.CharField(max_length=150)
+    video = models.FileField(upload_to="videos/")
+
+    def file_size(self):
+        if self.video:
+            return filesizeformat(self.video.size)
+        return "No file"
 
     def __str__(self):
         return self.title

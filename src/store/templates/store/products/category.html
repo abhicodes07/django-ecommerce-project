@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="text-3xl text-center p-4">Search: {{ category.name|title }}</h1>
-<section class="grid p-8 place-content-center gap-2">
+<h1 class="text-3xl text-center p-4">Search: {{ category.name|title }}</h1>
+<section class="md:flex grid items-center justify-center p-8 mx-auto gap-2">
   {% for p in product %}
   <div class="card bg-base-200 w-96 shadow-sm">
     <figure class="px-10 pt-10">

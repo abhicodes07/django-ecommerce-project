@@ -1,12 +1,14 @@
 from django.shortcuts import get_object_or_404, render
+from django.template import context
 
-from .models import Category, Product
+from .models import Background, Category, Product
 
 
 # Create your views here.
 def all_product(request):
     product = Product.objects.all()
-    context = {"product": product}
+    background = Background.objects.first()
+    context = {"product": product, "background": background}
     return render(request, "store/home.html", context=context)
 
 

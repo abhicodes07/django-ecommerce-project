@@ -9,6 +9,38 @@
     synthwave;
 }
 
+@theme {
+  --color-warmcream-100: #f8f6f2;
+  --color-warmcream-200: #f0ece6;
+  --color-warmcream-300: #e5e0d8;
+  --color-warmcream-400: #d6d0c6;
+  --color-warmcream-500: #bfb9ab;
+  --color-warmcream-600: #a79f94;
+  --color-warmcream-700: #8d867d;
+  --color-warmcream-800: #726c65;
+  --color-warmcream-900: #59524e;
+
+  --color-warmgold-100: #fff9ed;
+  --color-warmgold-200: #fdf2dc;
+  --color-warmgold-300: #f5e6c8;
+  --color-warmgold-400: #e4d3af;
+  --color-warmgold-500: #d2be97;
+  --color-warmgold-600: #bfa97e;
+  --color-warmgold-700: #9e8c66;
+  --color-warmgold-800: #7c6f4e;
+  --color-warmgold-900: #5a5237;
+
+  --color-sandstone-100: #f3eee7;
+  --color-sandstone-200: #e5dbcb;
+  --color-sandstone-300: #d6c9b5;
+  --color-sandstone-400: #c3b59f;
+  --color-sandstone-500: #b09e88;
+  --color-sandstone-600: #9c8771;
+  --color-sandstone-700: #836f5d;
+  --color-sandstone-800: #685746;
+  --color-sandstone-900: #4d4032;
+}
+
 .nerd-font {
   font-family: "JetBrainsMono Nerd Font Mono", monospace;
   font-optical-sizing: auto;

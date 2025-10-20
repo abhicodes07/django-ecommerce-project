@@ -28,7 +28,7 @@
               <ul class="p-2">
                 <li><a href="">All</a></li>
                 {% for c in categories %}
-                  <li><a href="{{ c.get_absolute_url }}">{{ c.name|title }}</a></li>
+                <li><a href="{{ c.get_absolute_url }}">{{ c.name|title }}</a></li>
                 {% endfor %}
               </ul>
             </details>
@@ -40,7 +40,7 @@
     </div>
     <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal px-1">
-        <li><a href="{% url "store:home" %}">Home <span class="icon">&#xf4e2</span></a></li>
+        <li><a href="{% url 'store:home' %}">Home <span class="icon">&#xf4e2</span></a></li>
         <li><a>Store</a></li>
         <li>
           <details>
@@ -48,7 +48,7 @@
             <ul class="menu dropdown-content bg-base-500 rounded-box z-1 w-52 p-2 shadow-sm">
               <li><a href="">All</a></li>
               {% for c in categories %}
-                <li> <a href="{{ c.get_absolute_url }}"> {{ c.name|title }} </a></li>
+              <li> <a href="{{ c.get_absolute_url }}"> {{ c.name|title }} </a></li>
               {% endfor %}
             </ul>
           </details>

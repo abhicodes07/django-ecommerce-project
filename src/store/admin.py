@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Product
+from .models import Background, Category, Product
 
 
 # Register your models here.
@@ -28,3 +28,8 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         "slug": ["title"],
     }
+
+
+@admin.register(Background)
+class BackgroundAdmin(admin.ModelAdmin):
+    list_display = ["title", "file_size"]
