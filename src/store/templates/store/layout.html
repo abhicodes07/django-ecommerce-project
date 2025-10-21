@@ -9,6 +9,8 @@
   <title>{% block title %} My Shop {% endblock %} </title>
   <link href="{% static " css/style.css" %}" rel="stylesheet" />
   {% tailwind_css %}
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 
 <body class="nerd-font leading-normal tracking-normal">
@@ -21,7 +23,7 @@
           </svg>
         </div>
         <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-          <li><a href="{% url 'store:home' %}">Home <span class="icon">&#xf4e2</span></a></li>
+          <li><a href="{% url 'store:product_all' %}">Home <span class="icon">&#xf4e2</span></a></li>
           <li>
             <details>
               <summary>Library</summary>
@@ -40,7 +42,7 @@
     </div>
     <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal px-1">
-        <li><a href="{% url 'store:home' %}">Home <span class="icon">&#xf4e2</span></a></li>
+        <li><a href="{% url 'store:product_all' %}">Home <span class="icon">&#xf4e2</span></a></li>
         <li><a>Store</a></li>
         <li>
           <details>

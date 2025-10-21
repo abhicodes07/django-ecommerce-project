@@ -4,7 +4,7 @@ from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 
 from store.models import Category, Product
-from store.views import all_product
+from store.views import product_all
 
 
 class TestViewResponses(TestCase):
@@ -59,7 +59,7 @@ class TestViewResponses(TestCase):
     def test_homepage_html(self):
         """Test the homepage html"""
         request = HttpRequest()
-        response = all_product(request)
+        response = product_all(request)
         html = response.content.decode("utf-8")
 
         # below line says that the first argument should be contained by the second argument
@@ -68,8 +68,8 @@ class TestViewResponses(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_view_function(self):
-        request = self.factory.get("/product/django-beginners")
-        response = all_product(request)
+        request = self.factory.get("/django-beginners")
+        response = product_all(request)
         html = response.content.decode("utf8")
 
         # below line says that the first argument should be contained by the second argument

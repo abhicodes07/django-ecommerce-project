@@ -5,8 +5,11 @@ from .models import Background, Category, Product
 
 
 # Create your views here.
-def all_product(request):
-    product = Product.objects.all()
+def product_all(request):
+    # HACK: create your own modal manager 'product' to create a default
+    # filter for inactive products.
+    # comes from `modals.py` file.
+    product = Product.products.all()
     background = Background.objects.first()
     context = {"product": product, "background": background}
     return render(request, "store/home.html", context=context)
@@ -17,7 +20,7 @@ def product_detail(request, slug):
     # show only products which are in stock.
     product = get_object_or_404(Product, slug=slug, in_stock=True)
     context = {"product": product}
-    return render(request, "store/products/detail.html", context=context)
+    return render(request, "store/products/single.html", context=context)
 
 
 def category_list(request, category_slug):
