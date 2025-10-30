@@ -7,7 +7,9 @@ from .basket import Basket
 
 # Create your views here.
 def basket_summary(request):
-    return render(request, "basket/summary.html")
+    basket = Basket(request)
+    context = {"basket": basket}
+    return render(request, "basket/summary.html", context=context)
 
 
 def basket_add(request):
