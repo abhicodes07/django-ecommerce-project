@@ -1,3 +1,4 @@
+from importlib import import_module
 from django.contrib.auth.models import User
 from django.http import HttpRequest, request, response
 from django.test import Client, RequestFactory, TestCase
