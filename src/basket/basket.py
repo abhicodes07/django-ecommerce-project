@@ -27,7 +27,10 @@ class Basket:
         """Adding and updating the users basket session data."""
 
         product_id = str(product.id)
-        if product_id not in self.basket:
+
+        if product_id in self.basket:
+            self.basket[product_id]["qty"] = qty
+        else:
             self.basket[product_id] = {
                 "price": str(product.price),
                 "qty": int(qty),
@@ -47,11 +50,11 @@ class Basket:
         # since session stores data in a dictionary format, we can access
         # the products stored in it using thier product_id
         product_ids = self.basket.keys()
-        print(f"PRODUCT IDS: {product_ids}")
+        # print(f"PRODUCT IDS: {product_ids}")
 
         # query to get all the data associated with products
         products = Product.products.filter(id__in=product_ids)
-        print(f"PRODUCTS: {products}")
+        # print(f"PRODUCTS: {products}")
 
         # copy the instance of basket in order to update
         # or delete any information
@@ -60,7 +63,7 @@ class Basket:
         # add or delete information
         for product in products:
             basket[str(product.id)]["product"] = product
-            print(product)
+            # print(product)
 
         for item in basket.values():
             item["price"] = Decimal(item["price"])
@@ -83,6 +86,16 @@ class Basket:
         print(type(product_id))
         if product_id in self.basket:
             del self.basket[product_id]
+        self.save_basket()
+
+    def update(self, product, qty):
+        """Update values in session data."""
+        product_id = str(product)
+        qty = qty
+
+        if product_id in self.basket:
+            self.basket[product_id]["qty"] = qty
+
         self.save_basket()
 
     def save_basket(self):
