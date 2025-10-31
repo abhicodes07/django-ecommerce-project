@@ -57,6 +57,11 @@ Basket Summary
         </tr>
         {% endwith %}
         {% endfor %}
+        <tr class="border-t-2 border-base">
+          <td></td>
+          <td class="text-xl border-r-2 border-base">Total</td>
+          <td class="text-xl">${{ basket.get_total_price }}</td>
+        </tr>
       </tbody>
     </table>
   </div>

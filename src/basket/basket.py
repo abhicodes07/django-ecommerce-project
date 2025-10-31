@@ -70,3 +70,9 @@ class Basket:
     def __len__(self):
         """Get the basket data and count of items."""
         return sum(item["qty"] for item in self.basket.values())
+
+    def get_total_price(self):
+        """Get the total price of items in the basket."""
+        return sum(
+            Decimal(item["price"]) * item["qty"] for item in self.basket.values()
+        )
