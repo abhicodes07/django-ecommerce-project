@@ -33,7 +33,7 @@ class Basket:
                 "qty": int(qty),
             }
 
-        self.session.modified = True
+        self.save_basket()
 
     def __iter__(self):
         """
@@ -76,3 +76,14 @@ class Basket:
         return sum(
             Decimal(item["price"]) * item["qty"] for item in self.basket.values()
         )
+
+    def delete(self, product):
+        """Delete item from session data."""
+        product_id = str(product)
+        print(type(product_id))
+        if product_id in self.basket:
+            del self.basket[product_id]
+        self.save_basket()
+
+    def save_basket(self):
+        self.session.modified = True

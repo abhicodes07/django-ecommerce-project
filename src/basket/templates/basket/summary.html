@@ -39,8 +39,9 @@ Basket Summary
             <p>{{ product.description }}</p>
             <div class="flex flex-row justify-between">
               <div class="flex flex-row gap-2">
-                <button class="btn btn-outline btn-secondary">Update</button>
-                <button class="btn btn-link">Delete</button>
+                <button class="btn btn-outline btn-secondary" id="update-button">Update</button>
+                <button class="btn btn-link delete-button" id="delete-button"
+                  data-index="{{ product.id }}">Delete</button>
               </div>
               <select id="select" class="select select-info focus:outline-none w-fit">
                 <option selected>{{ item.qty }}</option>
@@ -66,4 +67,21 @@ Basket Summary
     </table>
   </div>
 </section>
+
+<script>
+  $(document).on('click', '.delete-button', function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: '{% url "basket:basket_delete" %}',
+      data: {
+        productid: $(this).data('index'),
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+        action: 'post'
+      },
+      success: {},
+      error: function (xhr, errmsg, err) { }
+    });
+  })
+</script>
 {% endblock %}

@@ -12,6 +12,7 @@ def basket_summary(request):
     return render(request, "basket/summary.html", context=context)
 
 
+# add product
 def basket_add(request):
     basket = Basket(request)
 
@@ -26,3 +27,14 @@ def basket_add(request):
             {"success": True, "basket": request.session.get("skey"), "qty": basket_qty}
         )
     return JsonResponse({"error": "invalid request"}, status=400)
+
+
+# delete product
+def basket_delete(request):
+    basket = Basket(request)
+
+    if request.method == "POST" and request.POST.get("action") == "post":
+        product_id = int(request.POST.get("productid"))
+        basket.delete(product=product_id)
+        response = JsonResponse({"success": True})
+        return response
