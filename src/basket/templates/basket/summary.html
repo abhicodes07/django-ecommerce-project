@@ -22,7 +22,7 @@ Basket Summary
         <!--Row 1-->
         {% for item in basket %}
         {% with product=item.product %}
-        <tr>
+        <tr data-index="{{ product.id }}" class="product-item">
           <td class="md:visible">
             <figure>
               <img src="{{ product.image.url }}" alt="{{ product.slug }}">
@@ -68,9 +68,14 @@ Basket Summary
   </div>
 </section>
 
+<!--TODO: Although we are successfully deleting an item from the basket
+          with out refreshing the page using AJAX but the total price still
+          remains unaffected and needs page to be refreshed to show the actual price.
+          Use ajax to solve this.-->
 <script>
   $(document).on('click', '.delete-button', function (e) {
     e.preventDefault();
+    var prod_id = $(this).data('index');
     $.ajax({
       type: 'POST',
       url: '{% url "basket:basket_delete" %}',
@@ -79,7 +84,10 @@ Basket Summary
         csrfmiddlewaretoken: "{{ csrf_token }}",
         action: 'post'
       },
-      success: {},
+      success: function (json) {
+        console.log(prod_id)
+        $('.product-item[data-index="' + prod_id + '"]').remove();
+      },
       error: function (xhr, errmsg, err) { }
     });
   })
