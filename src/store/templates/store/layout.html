@@ -7,8 +7,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{% block title %} My Shop {% endblock %} </title>
-  <link href="{% static " css/style.css" %}" rel="stylesheet" />
   {% tailwind_css %}
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20,100,1&icons_names=store,library_books,home,search,login"
+    rel="stylesheet" />
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
@@ -23,10 +25,10 @@
           </svg>
         </div>
         <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-          <li><a href="{% url 'store:product_all' %}">Home <span class="icon">&#xf4e2</span></a></li>
+          <li><a href="{% url 'store:product_all' %}">home <span class="material-symbols-outlined">home</span></a></li>
           <li>
             <details>
-              <summary>Library</summary>
+              <summary>library <span class="material-symbols-outlined">library_books</span></summary>
               <ul class="p-2">
                 <li><a href="">All</a></li>
                 {% for c in categories %}
@@ -35,18 +37,18 @@
               </ul>
             </details>
           </li>
-          <li><a>Logout </a></li>
+          <li><a>Logout <span class="material-symbols-outlined">logout</span></a></li>
         </ul>
       </div>
-      <a class="btn btn-ghost text-xl">BOOKSTORE <span class="icon">&#xf120;</span></a>
+      <a class="btn btn-ghost text-xl">bookstore. <span class="material-symbols-outlined">store</span></a>
     </div>
     <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal px-1">
-        <li><a href="{% url 'store:product_all' %}">Home <span class="icon">&#xf4e2</span></a></li>
-        <li><a>Store</a></li>
+        <li><a href="{% url 'store:product_all' %}">home <span class="material-symbols-outlined">home</span></a></li>
+        <li><a>store <span class="material-symbols-outlined">store</span></a></li>
         <li>
           <details>
-            <summary>Library</summary>
+            <summary>library <span class="material-symbols-outlined">library_books</span></summary>
             <ul class="menu dropdown-content bg-base-500 rounded-box z-1 w-52 p-2 shadow-sm">
               <li><a href="">All</a></li>
               {% for c in categories %}
@@ -60,22 +62,20 @@
 
     <div class="gap-2 navbar-end flex">
       <input type="text" placeholder="Search " class="input input-bordered w-24 md:w-auto" />
-      <a href="{% url 'basket:basket_summary' %}" class="flex gap-2 border-2 rounded-lg p-1 px-2 items-center">
+      <a href="{% url 'basket:basket_summary' %}" class="relative gap-2 rounded-full p-1 px-2 items-center">
         {% with total_qty=basket|length %}
-        <div id="qty-basket">
+        <span class="rounded-full px-1 text-xs bg-red-600/70 absolute top-0 right-0" id="qty-basket">
           {% if total_qty > 0 %}
           {{ total_qty }}
           {% else %}
           0
           {% endif %}
-        </div>
+        </span>
         {% endwith %}
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-          <path fill-rule="evenodd"
-            d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 0 0 4.25 22.5h15.5a1.875 1.875 0 0 0 1.865-2.071l-1.263-12a1.875 1.875 0 0 0-1.865-1.679H16.5V6a4.5 4.5 0 1 0-9 0ZM12 3a3 3 0 0 0-3 3v.75h6V6a3 3 0 0 0-3-3Zm-3 8.25a3 3 0 1 0 6 0v-.75a.75.75 0 0 1 1.5 0v.75a4.5 4.5 0 1 1-9 0v-.75a.75.75 0 0 1 1.5 0v.75Z"
-            clip-rule="evenodd" />
-        </svg> Basket
+        <span class="material-symbols-outlined">shopping_cart</span>
       </a>
+
+      {% if user.is_authenticated %}
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
@@ -84,16 +84,16 @@
           </div>
         </div>
         <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-          <li>
-            <a class="justify-between">
-              Profile
-              <span class="badge">New</span>
-            </a>
-          </li>
-          <li><a>Settings</a></li>
-          <li><a>Logout 󰍃</a></li>
+          <li><a>profile</a></li>
+          <li><a>settings</a></li>
+          <li><a>logout 󰍃</a></li>
         </ul>
       </div>
+      {% else %}
+      <a class="btn btn-primary rounded-full" href="#">
+        Login
+      </a>
+      {% endif %}
     </div>
   </div>
 

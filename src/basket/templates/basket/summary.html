@@ -10,7 +10,7 @@ Basket Summary
   <div class="overflow-x-auto rounded-box border-2 border-base-100/50 bg-base-200">
     <table class="table">
       <!--Head-->
-      <thead>
+      <thead class="md:table-header-group hidden">
         <tr>
           <th>Image</th>
           <th>Product</th>
@@ -23,7 +23,7 @@ Basket Summary
         {% for item in basket %}
         {% with product=item.product %}
         <tr data-index="{{ product.id }}" class="product-item">
-          <td class="md:visible">
+          <td>
             <figure>
               <img src="{{ product.image.url }}" alt="{{ product.slug }}">
             </figure>
@@ -37,14 +37,14 @@ Basket Summary
             </div>
             <span class="badge badge-success text-base badge-outline">{{ product.author }}</span>
             <p>{{ product.description }}</p>
-            <div class="flex flex-row justify-between">
-              <div class="flex flex-row gap-2">
-                <button class="btn btn-outline btn-secondary update-button" data-index="{{ product.id }}"
-                  id="update-button">Update</button>
-                <button class="btn btn-link delete-button" id="delete-button"
+            <div class="flex flex-wrap gap-1 justify-between">
+              <div class="flex flex-wrap gap-2">
+                <button class="btn btn-outline btn-secondary update-button md:w-auto w-full"
+                  data-index="{{ product.id }}" id="update-button">Update</button>
+                <button class="btn btn-primary delete-button md:w-auto w-full" id="delete-button"
                   data-index="{{ product.id }}">Delete</button>
               </div>
-              <select id="select{{product.id}}" class="select select-info focus:outline-none w-fit">
+              <select id="select{{product.id}}" class="select select-info focus:outline-none md:w-auto w-full">
                 <option selected>{{ item.qty }}</option>
                 <option value=1>1</option>
                 <option value=2>2</option>
@@ -53,7 +53,7 @@ Basket Summary
               </select>
             </div>
           </td>
-          <td>
+          <td class="">
             <span class="text-xl">${{ item.total_price }}</span>
           </td>
         </tr>
@@ -66,6 +66,11 @@ Basket Summary
         </tr>
       </tbody>
     </table>
+    <div class="flex justify-end bg-base-100 w-full">
+      <a href="#"
+        class="rounded-box rounded-tl-none rounded-bl-none rounded-tr-none btn btn-success md:min-w-xl">Checkout <span
+          class="material-symbols-outlined">payments</span></a>
+    </div>
   </div>
 </section>
 

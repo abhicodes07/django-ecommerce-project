@@ -6,8 +6,7 @@ Bookstore
 {% endblock %}
 
 {% block content %}
-<div class="indicator hero min-h-screen"
-  style="background-image: url({{background.video.url}});">
+<div class="indicator hero min-h-screen" style="background-image: url({{background.video.url}});">
   <div class="hero-content text-neutral-content text-center flex-col">
     <div class="max-w-full">
       <h1 class="mb-5 font-bold text-2xl md:text-5xl sm:text-3xl">Search, Read, Buy, Review</h1>
@@ -36,10 +35,15 @@ Bookstore
       <figure class="px-10 pt-10">
         <img src="{{ p.image.url }}" alt="Shoes" class="rounded-xl" />
       </figure>
-      <div class="card-body items-center text-center">
-        <h2 class="card-title"><a href="{{ p.get_absolute_url }}">{{ p.title|title }}</a></h2>
-        <p>{{ p.description }}</p>
-        <div class="card-actions justify-center">
+      <div class="card-body">
+        <h1 class="font-bold text-lg flex justify-between w-full">
+          <a href="{{ p.get_absolute_url }}">
+            {{ p.title|title }}
+          </a>
+          <span>${{ p.price }}</span>
+        </h1>
+        <p class="line-clamp-5 text-white/50">{{ p.description }}</p>
+        <div class="card-actions">
           <a href="" class="badge badge-outline badge-success my-2">
             {{ p.category }}
           </a>

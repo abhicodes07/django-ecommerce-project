@@ -6,7 +6,8 @@
   themes:
     light --default,
     dark --prefersdark,
-    synthwave;
+    synthwave,
+    black;
 }
 
 @theme {
