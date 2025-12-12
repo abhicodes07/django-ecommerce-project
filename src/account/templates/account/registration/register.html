@@ -1,0 +1,35 @@
+{% extends "store/layout.html" %}
+{% block title %}
+Register
+{% endblock %}
+
+{% block content %}
+<section class="flex items-center w-full justify-center h-[90vh]">
+  <form class="fieldset bg-base-200 border-base-300 rounded-box lg:w-xl w-auto border p-4" method="POST">
+    {% csrf_token %}
+    <fieldset class="fieldset">
+      <label for="{{ form.user_name.id_for_label }}" class="label">{{ form.user_name.label }}</label>
+      {{ form.user_name }}
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <label for="{{ form.email.id_for_label }}" class="label">{{ form.email.label }}</label>
+      {{ form.email }}
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <label for="{{ form.password.id_for_label }}" class="label">{{ form.password.label }}</label>
+      {{ form.password }}
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <label for="{{ form.password2.id_for_label }}" class="label">{{ form.password2.label }}</label>
+      {{ form.password2 }}
+    </fieldset>
+
+    <button class="btn btn-neutral mt-4" type="submit">Login</button>
+    <button class="btn btn-ghost mt-1" type="reset">Reset</button>
+    <a href="#" class="text-center link-accent">Already have an account?</a>
+  </form>
+</section>
+{% endblock %}
