@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from .models import UserBase
 
 
@@ -66,3 +67,79 @@ class RegistrationForm(forms.ModelForm):
         self.fields["password2"].widget.attrs.update(
             {"class": "input w-full", "placeholder": "Confirm Password"}
         )
+
+
+class UserLoginForm(AuthenticationForm):
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "input w-full",
+                "placeholder": "Username",
+                "id": "login-username",
+            }
+        )
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "input w-full",
+                "placeholder": "Password",
+                "id": "login-pwd",
+            }
+        )
+    )
+
+
+class UserEditForm(forms.ModelForm):
+    user_name = forms.CharField(
+        label="Username",
+        min_length=4,
+        max_length=150,
+        widget=forms.TextInput(
+            attrs={
+                "class": "input w-full",
+                "placeholder": "Username",
+                "id": "form-username",
+                "readonly": "readonly",
+            }
+        ),
+    )
+
+    email = forms.EmailField(
+        label="Account email (cannot be changed)",
+        widget=forms.EmailInput(
+            attrs={
+                "class": "input w-full",
+                "id": "form-email",
+                "readonly": "readonly",
+                "placeholder": "Email",
+            }
+        ),
+    )
+
+    first_name = forms.CharField(
+        label="First name",
+        max_length=150,
+        min_length=4,
+        widget=forms.TextInput(
+            attrs={
+                "class": "input w-full",
+                "placeholder": "First Name",
+                "id": "form-firstname",
+            }
+        ),
+    )
+
+    class Meta:
+        model = UserBase
+        fields = (
+            "user_name",
+            "email",
+            "first_name",
+        )
+
+    # some fields needs to filled necessarily by the user
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["first_name"].required = True
+        self.fields["email"].required = True

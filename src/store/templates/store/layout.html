@@ -76,21 +76,12 @@
       </a>
 
       {% if user.is_authenticated %}
-      <div class="dropdown dropdown-end">
-        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-          <div class="w-10 rounded-full">
-            <img alt="Tailwind CSS Navbar component"
-              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-          </div>
-        </div>
-        <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-          <li><a>profile</a></li>
-          <li><a>settings</a></li>
-          <li><a>logout 󰍃</a></li>
-        </ul>
-      </div>
+      <form method="POST" action="{% url 'account:logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary rounded-full">Logout</button>
+      </form>
       {% else %}
-      <a class="btn btn-primary rounded-full" href="#">
+      <a class="btn btn-primary rounded-full" href="{% url 'account:login' %}">
         Login
       </a>
       {% endif %}

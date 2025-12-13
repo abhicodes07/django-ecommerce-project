@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -8,7 +8,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
 from .models import UserBase
-from .forms import RegistrationForm
+from .forms import RegistrationForm, UserEditForm
 from .token import account_activation_token
 
 
@@ -77,3 +77,29 @@ def account_activate(request, uidb64, token):
     else:
         # if the activation fails
         return render(request, "account/registration/activation_invalid.html")
+
+
+# edit user details
+@login_required
+def edit_details(request):
+    if request.method == "POST":
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+
+        if user_form.is_valid():
+            user_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+
+    return render(
+        request, "account/registration/edit_details.html", {"user_form": user_form}
+    )
+
+
+# delete user view
+@login_required
+def delete_user(request):
+    user = UserBase.objects.get(user_name=request.user)
+    user.is_active = False
+    user.save()
+    logout(request)
+    return redirect("account:delete_confirmation")

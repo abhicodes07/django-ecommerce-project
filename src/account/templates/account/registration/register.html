@@ -27,9 +27,9 @@ Register
       {{ form.password2 }}
     </fieldset>
 
-    <button class="btn btn-neutral mt-4" type="submit">Login</button>
+    <button class="btn btn-neutral mt-4" type="submit">Register</button>
     <button class="btn btn-ghost mt-1" type="reset">Reset</button>
-    <a href="#" class="text-center link-accent">Already have an account?</a>
+    <a href="{% url 'account:login' %}" class="text-center link-accent">Already have an account?</a>
   </form>
 </section>
 {% endblock %}
