@@ -1,0 +1,25 @@
+{% extends "store/layout.html" %}
+{% block title %}
+Password Reset
+{% endblock %}
+
+{% if user.is_authenticated %}
+<script>
+  window.location.href = "{% url 'account:dashboard' %}";
+</script>
+{% endif %}
+
+{% block content %}
+<section class="flex items-center w-full justify-center h-[90vh]">
+  <div class="text-center justify-center fieldset bg-base-200 border-base-300 rounded-box lg:w-xl w-auto border p-4">
+    {% if 'email' in request.get_full_path %}
+    <h1 class="text-2xl">Password Reset Success</h1>
+    <p>Check your email for further instructions.</p>
+    {% endif %}
+    {% if 'complete' in request.get_full_path %}
+    <h1 class="text-2xl">Password Reset Success</h1>
+    <a class="link-neutral" href="{% url 'account:login' %}">Login</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

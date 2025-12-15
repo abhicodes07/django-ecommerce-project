@@ -62,6 +62,7 @@ def account_register(request):
     return render(request, "account/registration/register.html", {"form": registerForm})
 
 
+# account activation
 def account_activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))

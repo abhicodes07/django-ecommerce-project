@@ -1,8 +1,8 @@
-from django.urls import path
+from django.urls import path, reverse_lazy
 from django.views.generic import TemplateView
 from . import views
 from core.settings import LOGIN_URL
-from .forms import UserLoginForm
+from .forms import UserLoginForm, PwdResetForm, PwdResetConfirmForm
 from django.contrib.auth import views as auth_views
 
 # better access urls using namespace
@@ -28,7 +28,42 @@ urlpatterns = [
         views.account_activate,
         name="activate",  # slug is a data type here
     ),
-    path("dashboard/", views.dashboard, name="dashboard"),  # user dashboard
+    # link to send you email containing the url of password reset
+    path(
+        "password_reset/",
+        auth_views.PasswordResetView.as_view(
+            template_name="account/user/password_reset_form.html",
+            success_url="password_reset_email_confirm",
+            email_template_name="account/user/password_reset_email.html",
+            form_class=PwdResetForm,
+        ),
+        name="pwdreset",
+    ),
+    # link for successful email sent for password reset
+    path(
+        "password_reset/password_reset_email_confirm/",
+        TemplateView.as_view(template_name="account/user/reset_status.html"),
+        name="password_reset_done",
+    ),
+    # link in email for reset containing uidb64 and token
+    path(
+        "password_reset_confirm/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name="account/user/password_reset_confirm.html",
+            success_url=reverse_lazy("account:password_reset_complete"),
+            form_class=PwdResetConfirmForm,
+        ),
+        name="password_reset_confirm",
+    ),
+    # link for displaying the template on successful password reset
+    # NOTE: uses same template as password_reset_confirm: reset_status
+    path(
+        "password_reset/password_reset_complete/",
+        TemplateView.as_view(template_name="account/user/reset_status.html"),
+        name="password_reset_complete",
+    ),
+    # user dashboard
+    path("dashboard/", views.dashboard, name="dashboard"),
     path("profile/edit/", views.edit_details, name="edit_details"),
     path("profile/delete_user/", views.delete_user, name="delete_user"),
     path(
