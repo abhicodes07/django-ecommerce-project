@@ -27,6 +27,8 @@ media/
 *.pot
 *.py[cod]
 *.mo
+*.properties
+*.prp
 
 # Migrations (optional: keep only __init__.py)
 **/migrations/*.py

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +28,8 @@ SECRET_KEY = "django-insecure-*91$j#)z8apfu%1986y$3zz9wp2my6_ja+2(7-b!bxcuk5rjv6
 DEBUG = True
 
 # for deployment
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [".ngrok-free.dev"]
+CSRF_TRUSTED_ORIGINS = ["https://overbrilliantly-unfostering-tashia.ngrok-free.dev"]
 
 
 # Application definition
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "basket",
     "account",
+    "payment",
 ]
 
 # Tailwind config
@@ -151,3 +154,18 @@ LOGIN_URL = "/account/login/"
 
 # add email backend
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# wordline config
+WORLD_LINE = {
+    "API_KEY": config("WORLD_LINE_API_KEY_ID"),
+    "API_KEY_SECRET": config("WORLD_LINE_API_SECRET"),
+    "MERCHANT_ID": config("WORLD_LINE_MERCHANT_ID"),
+    "ENVIRONMENT": config("ENVIRONMENT"),
+}
+
+if WORLD_LINE["ENVIRONMENT"] == "test":
+    WORLD_LINE["PAYMENT_URL"] = (
+        "https://payment.preprod.direct.worldline-solutions.com/v2/"
+    )
+else:
+    WORLD_LINE["PAYMENT_URL"] = "https://payment.direct.worldline-solutions.com/v2/"
