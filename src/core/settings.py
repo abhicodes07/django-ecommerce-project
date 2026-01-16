@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-*91$j#)z8apfu%1986y$3zz9wp2my6_ja+2(7-b!bxcuk5rjv6
 DEBUG = True
 
 # for deployment
-ALLOWED_HOSTS = [".ngrok-free.dev"]
+ALLOWED_HOSTS = [".ngrok-free.dev", "127.0.0.1"]
 CSRF_TRUSTED_ORIGINS = ["https://overbrilliantly-unfostering-tashia.ngrok-free.dev"]
 
 
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "basket",
     "account",
     "payment",
+    "orders",
 ]
 
 # Tailwind config
