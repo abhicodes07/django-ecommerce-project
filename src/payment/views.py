@@ -1,13 +1,21 @@
 from django.shortcuts import redirect, render
+from onlinepayments.sdk.communication.request_header import RequestHeader
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.db.models import Exists
+from django.http import JsonResponse
+from .utils import get_webhooks_helper
 from .forms import BillingAddressForm
 from .worldline import WorldLineService
 from .client import get_worldline_client
 from basket.basket import Basket
+from .models import Order, OrderItem
+import traceback
 
 
+# create payment request
 @login_required
 @require_http_methods(["GET", "POST"])
 def create_payment(request):
@@ -44,7 +52,12 @@ def create_payment(request):
             # NOTE: Step 3 of S2S: Process and handle the response
             try:
                 response = service.create_payment(request, card, order, user)
-                print(f"Response: {response}")
+                total_price = basket.get_total_price()
+                user_id = request.user.id
+
+                if hasattr(response, "payment"):
+                    paymentid = response.payment.id
+                    print(paymentid)
 
                 # if there's merchant action then 3DS is required
                 if hasattr(response, "merchant_action") and response.merchant_action:
@@ -76,9 +89,11 @@ def create_payment(request):
                             },
                         )
 
-            except Exception as e:
+            except Exception:
                 return render(
-                    request, "payment/response_failure.html", {"error": str(e)}
+                    request,
+                    "payment/response_failure.html",
+                    {"error": traceback.print_exc()},
                 )
     else:
         form = BillingAddressForm()
@@ -86,7 +101,8 @@ def create_payment(request):
     return render(request, "payment/home.html", {"form": form})
 
 
-# After 3DS redirect, Worldline posts back to your returnUrl. Fetch details to confirm.
+# After 3DS redirect, Worldline posts back to your returnUrl.
+# Fetch details to confirm.
 @csrf_exempt
 def payment_callback_view(request):
     if request.method == "GET":
@@ -120,3 +136,37 @@ def payment_callback_view(request):
                 )
 
     return redirect("payment:create_payment")  # Fallback
+
+
+# handle webhooks
+@csrf_exempt
+@require_POST
+def webhook(request):
+    basket = Basket(request)
+    body_bytes = request.body
+
+    headers = [
+        RequestHeader(name=k.lower(), value=v) for k, v in request.headers.items()
+    ]
+
+    try:
+        helper = get_webhooks_helper()
+        webhook_event = helper.unmarshal(body_bytes, headers)
+
+        payment = webhook_event.payment
+        status = payment.status
+        payment_id = payment.id
+        user = request.user.id
+
+        print(f"VALID Webhook: Payment {payment_id} → Status: {status}")
+
+        if status == "CREATED":
+            print("Payment Created")
+            return JsonResponse({"status": "success"}, status=200)
+        else:
+            print(f"WEBHOOK STATUS: {status}")
+            return JsonResponse({"status": "success"}, status=200)
+
+    except Exception as e:
+        print(f"Exception: {e}")
+        return JsonResponse({"status": "Recieved"}, status=200)

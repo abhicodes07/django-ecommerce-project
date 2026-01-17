@@ -25,7 +25,6 @@ urlpatterns = [
     path("basket/", include("basket.urls", namespace="basket")),
     path("account/", include("account.urls", namespace="account")),
     path("payment/", include("payment.urls", namespace="payment")),
-    path("orders/", include("orders.urls", namespace="orders")),
     path("", include("store.urls", namespace="store")),
     path("__reload__/", include("django_browser_reload.urls")),
 ]

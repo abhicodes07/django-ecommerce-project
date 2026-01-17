@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     "basket",
     "account",
     "payment",
-    "orders",
 ]
 
 # Tailwind config

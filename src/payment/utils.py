@@ -12,5 +12,4 @@ webhook_key_store.store_secret_key(WORLD_LINE_WEBHOOK_ID, WORLD_LINE_WEBHOOK_SEC
 
 def get_webhooks_helper():
     marshaller = DefaultMarshaller.instance()
-    print(marshaller)
     return WebhooksHelper(marshaller, webhook_key_store)
