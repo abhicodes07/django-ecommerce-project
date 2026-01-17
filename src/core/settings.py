@@ -170,3 +170,6 @@ if WORLD_LINE["ENVIRONMENT"] == "test":
     )
 else:
     WORLD_LINE["PAYMENT_URL"] = "https://payment.direct.worldline-solutions.com/v2/"
+
+WORLD_LINE_WEBHOOK_ID = config("WORLD_LINE_WEBHOOK_ID")
+WORLD_LINE_WEBHOOK_SECRET = config("WORLD_LINE_WEBHOOK_SECRET")

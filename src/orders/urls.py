@@ -3,4 +3,6 @@ from . import views
 
 app_name = "orders"
 
-urlpatterns = []
+urlpatterns = [
+    path("webhook/", views.webhook, name="webhook"),
+]
