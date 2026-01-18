@@ -12,20 +12,7 @@ from .forms import BillingAddressForm
 from .worldline import WorldLineService
 from .client import get_worldline_client
 from basket.basket import Basket
-from .models import Order, OrderItem
-
-
-def order(request):
-    basket = Basket(request)
-
-    if request.method == "GET":
-        basket.clear()
-        return render(request, "payment/order_placed.html")
-
-    return render(
-        request,
-        "payment/order_cancelled.html",
-    )
+from orders.models import Order, OrderItem
 
 
 # create payment request
@@ -164,7 +151,7 @@ def payment_callback_view(request):
                     #     "payment/payment_success.html",
                     #     {"details": details.payment_output, "status": details.status},
                     # )
-                    return redirect("payment:order")
+                    return redirect("orders:orders")
                 # else:
                 #     # Failure
                 #     return render(
