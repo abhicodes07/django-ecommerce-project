@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.db.models import Exists
 from django.http import JsonResponse
 from .utils import get_webhooks_helper
 from .forms import BillingAddressForm
@@ -145,20 +144,7 @@ def payment_callback_view(request):
                     merchant_client.payments().capture_payment(
                         str(payment_id), capture_request
                     )
-
-                    # return render(
-                    #     request,
-                    #     "payment/payment_success.html",
-                    #     {"details": details.payment_output, "status": details.status},
-                    # )
                     return redirect("orders:orders")
-                # else:
-                #     # Failure
-                #     return render(
-                #         request,
-                #         "payment/payment_failed.html",
-                #         {"error": details.status},
-                #     )
 
             except Exception as e:
                 return render(
@@ -172,7 +158,6 @@ def payment_callback_view(request):
 @csrf_exempt
 @require_POST
 def webhook(request):
-    basket = Basket(request)
     body_bytes = request.body
 
     headers = [
@@ -197,5 +182,4 @@ def webhook(request):
             return JsonResponse({"status": "incomplete"}, status=200)
 
     except Exception as e:
-        print(f"Exception: {e}")
         return JsonResponse({"status": "Recieved"}, status=200)
