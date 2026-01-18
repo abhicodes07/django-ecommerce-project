@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from onlinepayments.sdk.communication.request_header import RequestHeader
+from onlinepayments.sdk.domain.capture_payment_request import CapturePaymentRequest
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
@@ -12,7 +13,19 @@ from .worldline import WorldLineService
 from .client import get_worldline_client
 from basket.basket import Basket
 from .models import Order, OrderItem
-import traceback
+
+
+def order(request):
+    basket = Basket(request)
+
+    if request.method == "GET":
+        basket.clear()
+        return render(request, "payment/order_placed.html")
+
+    return render(
+        request,
+        "payment/order_cancelled.html",
+    )
 
 
 # create payment request
@@ -44,6 +57,7 @@ def create_payment(request):
                 "id": request.user.id,
                 "email": form.cleaned_data["email"],
                 "address": form.cleaned_data["address"],
+                "name": form.cleaned_data["name"],
             }
 
             # create worldline service
@@ -54,14 +68,32 @@ def create_payment(request):
                 response = service.create_payment(request, card, order, user)
                 total_price = basket.get_total_price()
                 user_id = request.user.id
+                print(f"Status Recieved: {response.payment.status}")
 
-                if hasattr(response, "payment"):
+                if response.payment.status_output.is_authorized:
                     paymentid = response.payment.id
-                    print(paymentid)
+                    if not Order.objects.filter(payment_id=paymentid).exists():
+                        order = Order.objects.create(
+                            order_id=user_id,
+                            payment_id=paymentid,
+                            full_name=form.cleaned_data["name"],
+                            address1=form.cleaned_data["address"],
+                            address2=form.cleaned_data["address2"],
+                            total_paid=total_price,
+                        )
+
+                        order_id = order.pk
+
+                        for items in basket:
+                            OrderItem.objects.create(
+                                order_id=order_id,
+                                product=items["product"],
+                                price=items["price"],
+                                quantity=items["qty"],
+                            )
 
                 # if there's merchant action then 3DS is required
                 if hasattr(response, "merchant_action") and response.merchant_action:
-                    print(f"Response Type: {response.merchant_action.action_type}")
                     action = response.merchant_action
 
                     # 3D Secure challenge
@@ -71,7 +103,9 @@ def create_payment(request):
 
                 # no merchant action, likely Frictionless or immediate outcome
                 else:
-                    print(f"Status code: {response.payment.status_output.status_code}")
+                    print(
+                        f"Status: {response.payment.status}\nStatus code: {response.payment.status_output.status_code}"
+                    )
                     if response.payment.status_output.is_authorized:
                         # Frictionless 3DS
                         return render(
@@ -89,11 +123,11 @@ def create_payment(request):
                             },
                         )
 
-            except Exception:
+            except Exception as e:
                 return render(
                     request,
                     "payment/response_failure.html",
-                    {"error": traceback.print_exc()},
+                    {"error": str(e)},
                 )
     else:
         form = BillingAddressForm()
@@ -115,21 +149,30 @@ def payment_callback_view(request):
             try:
                 # get payment details
                 details = merchant_client.payments().get_payment(payment_id)
+                merchant_client = get_worldline_client()
+                capture_request = CapturePaymentRequest()
+                amount = details.payment_output.amount_of_money.amount
 
-                if details.status_output.is_authorized:
-                    # Success: Fulfill order
-                    return render(
-                        request,
-                        "payment/payment_success.html",
-                        {"details": details.payment_output, "status": details.status},
+                if details.status == "PENDING_CAPTURE":
+                    capture_request.from_dictionary({"amount": amount, "isFinal": True})
+                    merchant_client.payments().capture_payment(
+                        str(payment_id), capture_request
                     )
-                else:
-                    # Failure
-                    return render(
-                        request,
-                        "payment/payment_failed.html",
-                        {"error": details.status_output.status_code},
-                    )
+
+                    # return render(
+                    #     request,
+                    #     "payment/payment_success.html",
+                    #     {"details": details.payment_output, "status": details.status},
+                    # )
+                    return redirect("payment:order")
+                # else:
+                #     # Failure
+                #     return render(
+                #         request,
+                #         "payment/payment_failed.html",
+                #         {"error": details.status},
+                #     )
+
             except Exception as e:
                 return render(
                     request, "payment/response_failure.html", {"error": str(e)}
@@ -156,16 +199,15 @@ def webhook(request):
         payment = webhook_event.payment
         status = payment.status
         payment_id = payment.id
-        user = request.user.id
+        print(f"\n==== VALID Webhook: Payment {payment_id} → Status: {status} ====")
 
-        print(f"VALID Webhook: Payment {payment_id} → Status: {status}")
-
-        if status == "CREATED":
-            print("Payment Created")
+        if status == "CAPTURED":
+            Order.objects.filter(payment_id=payment_id).update(billing_status=True)
+            print("\n========= Payment Successful =========\n")
             return JsonResponse({"status": "success"}, status=200)
         else:
             print(f"WEBHOOK STATUS: {status}")
-            return JsonResponse({"status": "success"}, status=200)
+            return JsonResponse({"status": "incomplete"}, status=200)
 
     except Exception as e:
         print(f"Exception: {e}")

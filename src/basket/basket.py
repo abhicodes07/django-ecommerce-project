@@ -100,3 +100,7 @@ class Basket:
 
     def save_basket(self):
         self.session.modified = True
+
+    def clear(self):
+        del self.session["skey"]
+        self.save_basket()

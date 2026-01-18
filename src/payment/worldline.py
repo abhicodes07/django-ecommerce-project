@@ -72,11 +72,12 @@ class WorldLineService:
                     "billingAddress": {
                         "countryCode": "BE",
                         "city": "Brusells",
-                        "street": user["address"],
+                        "street": "main",
                         "houseNumber": "3",
                         "zip": 1938,
                     },
-                    "contactDetails": {"emailAddress": user["email"]},
+                    "contactDetails": {"emailAddress": "Dwight@gmail.com"},
+                    "personalInformation": {"firstName": "Dwight"},
                 },
                 "references": {
                     "merchantReference": f"order-{user['id'] or 'guest'}-{order['price']}"
@@ -85,10 +86,10 @@ class WorldLineService:
             "cardPaymentMethodSpecificInput": {
                 "paymentProductId": 1,
                 "card": {
-                    "cardholderName": card["card_holder_name"],
-                    "cardNumber": card["card_number"].replace(" ", ""),
-                    "cvv": card["cvv"],
-                    "expiryDate": card["expiry_date"],
+                    "cardholderName": "Dwight",
+                    "cardNumber": "4874970686672022",
+                    "cvv": "123",
+                    "expiryDate": "1227",
                 },
                 "threeDSecure": {
                     "authenticationFlow": "browser",

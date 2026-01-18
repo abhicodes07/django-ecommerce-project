@@ -23,8 +23,8 @@ class Order(models.Model):
     class Meta:
         ordering = ("-created",)
 
-        def __str__(self) -> str:
-            return str(self.created)
+    def __str__(self):
+        return str(self.created)
 
 
 class OrderItem(models.Model):
