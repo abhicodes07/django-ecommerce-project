@@ -10,12 +10,14 @@ from django.core.mail import EmailMultiAlternatives
 from .models import UserBase
 from .forms import RegistrationForm, UserEditForm
 from .token import account_activation_token
+from orders.views import user_orders
 
 
 # Create your views here.
 @login_required
 def dashboard(request):
-    return render(request, "account/user/dashboard.html")
+    orders = user_orders(request)
+    return render(request, "account/user/dashboard.html", {"orders": orders})
 
 
 # account registration view
