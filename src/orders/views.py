@@ -8,9 +8,9 @@ def orders(request):
 
     if request.method == "GET":
         basket.clear()
-        return render(request, "payment/order_placed.html")
+        return render(request, "orders/order_placed.html")
 
     return render(
         request,
-        "payment/order_cancelled.html",
+        "orders/order_cancelled.html",
     )

@@ -27,6 +27,8 @@ def create_payment(request):
         form = BillingAddressForm(request.POST)
 
         if form.is_valid():
+            user_id = request.user.id
+
             order = {
                 "price": price,
                 "currency": form.cleaned_data["currency"].upper(),
@@ -40,7 +42,7 @@ def create_payment(request):
             }
 
             user = {
-                "id": request.user.id,
+                "id": user_id,
                 "email": form.cleaned_data["email"],
                 "address": form.cleaned_data["address"],
                 "name": form.cleaned_data["name"],
@@ -53,30 +55,39 @@ def create_payment(request):
             try:
                 response = service.create_payment(request, card, order, user)
                 total_price = basket.get_total_price()
-                user_id = request.user.id
+                payment_id = response.payment.id
+                merchant_ref = (
+                    response.payment.payment_output.references.merchant_reference
+                )
+
+                print("\n\n\n================== PAYMENT STARTED ==================")
                 print(f"Status Recieved: {response.payment.status}")
+                print(
+                    f"Response authorization: {response.payment.status_output.is_authorized}"
+                )
+                print(f"Merchant Reference: {merchant_ref}")
 
-                if response.payment.status_output.is_authorized:
-                    paymentid = response.payment.id
-                    if not Order.objects.filter(payment_id=paymentid).exists():
-                        order = Order.objects.create(
-                            order_id=user_id,
-                            payment_id=paymentid,
-                            full_name=form.cleaned_data["name"],
-                            address1=form.cleaned_data["address"],
-                            address2=form.cleaned_data["address2"],
-                            total_paid=total_price,
+                if not Order.objects.filter(merchant_reference=merchant_ref).exists():
+                    print("Created Order")
+                    order = Order.objects.create(
+                        order_id=user_id,
+                        payment_id=payment_id,
+                        full_name="abhi",
+                        address1="main",
+                        address2="main",
+                        total_paid=total_price,
+                        merchant_reference=merchant_ref,
+                    )
+
+                    order_id = order.pk
+
+                    for items in basket:
+                        OrderItem.objects.create(
+                            order_id=order_id,
+                            product=items["product"],
+                            price=items["price"],
+                            quantity=items["qty"],
                         )
-
-                        order_id = order.pk
-
-                        for items in basket:
-                            OrderItem.objects.create(
-                                order_id=order_id,
-                                product=items["product"],
-                                price=items["price"],
-                                quantity=items["qty"],
-                            )
 
                 # if there's merchant action then 3DS is required
                 if hasattr(response, "merchant_action") and response.merchant_action:
@@ -131,20 +142,34 @@ def payment_callback_view(request):
 
         if payment_id:
             merchant_client = get_worldline_client()
+            capture_request = CapturePaymentRequest()
 
             try:
                 # get payment details
                 details = merchant_client.payments().get_payment(payment_id)
-                merchant_client = get_worldline_client()
-                capture_request = CapturePaymentRequest()
-                amount = details.payment_output.amount_of_money.amount
+                merchant_ref = details.payment_output.references.merchant_reference
+                status = details.status
+                print(f"Id in callback: {payment_id}")
+                print(f"Merchant Reference in callback: {merchant_ref}")
 
-                if details.status == "PENDING_CAPTURE":
-                    capture_request.from_dictionary({"amount": amount, "isFinal": True})
+                if status == "PENDING_CAPTURE":
+                    Order.objects.filter(merchant_reference=merchant_ref).update(
+                        status="Processing"
+                    )
+                    capture_request.from_dictionary(dictionary={"isFinal": True})
                     merchant_client.payments().capture_payment(
                         str(payment_id), capture_request
                     )
                     return redirect("orders:orders")
+                else:
+                    return render(
+                        request,
+                        "payment/payment_failed.html",
+                        {
+                            "error": details.status_output.errors,
+                            "status": status,
+                        },
+                    )
 
             except Exception as e:
                 return render(
@@ -171,15 +196,19 @@ def webhook(request):
         payment = webhook_event.payment
         status = payment.status
         payment_id = payment.id
+        merchant_ref = payment.payment_output.references.merchant_reference
         print(f"\n==== VALID Webhook: Payment {payment_id} → Status: {status} ====")
 
         if status == "CAPTURED":
-            Order.objects.filter(payment_id=payment_id).update(billing_status=True)
+            print(f"Webhook Merchant Reference: {merchant_ref}")
+            Order.objects.filter(merchant_reference=merchant_ref).update(
+                billing_status=True, status="Processed"
+            )
             print("\n========= Payment Successful =========\n")
             return JsonResponse({"status": "success"}, status=200)
         else:
             print(f"WEBHOOK STATUS: {status}")
             return JsonResponse({"status": "incomplete"}, status=200)
 
-    except Exception as e:
+    except Exception:
         return JsonResponse({"status": "Recieved"}, status=200)

@@ -3,6 +3,7 @@ from onlinepayments.sdk.domain.create_payment_request import CreatePaymentReques
 from onlinepayments.sdk.domain.browser_data import BrowserData
 from onlinepayments.sdk.domain.customer_device import CustomerDevice
 from .client import get_worldline_client
+import uuid
 
 
 # Worldine payment integration
@@ -37,9 +38,6 @@ class WorldLineService:
         screen_width = request.POST.get("screen_width")
         color_depth = request.POST.get("color_depth")
         timezone_offset = request.POST.get("timezone_offset", "0")
-        print(
-            f"height: {screen_height}, width: {screen_width}, color depth: {color_depth}, timezone offset: {timezone_offset}"
-        )
 
         # build browser/device data for 3DS (mandatory)
         browserData = BrowserData()
@@ -80,7 +78,7 @@ class WorldLineService:
                     "personalInformation": {"firstName": "Dwight"},
                 },
                 "references": {
-                    "merchantReference": f"order-{user['id'] or 'guest'}-{order['price']}"
+                    "merchantReference": f"order-{user['id'] or 'guest'}-{str(uuid.uuid4())[:8]}"
                 },
             },
             "cardPaymentMethodSpecificInput": {

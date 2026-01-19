@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.template.defaultfilters import default
 from store.models import Product
 
 
@@ -16,9 +17,11 @@ class Order(models.Model):
     postal_code = models.CharField(max_length=20)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    total_paid = models.DateTimeField(auto_now=True)
+    total_paid = models.CharField(blank=True)
     payment_id = models.CharField(max_length=200)
     billing_status = models.BooleanField(default=False)
+    status = models.CharField(max_length=150, default="pending")
+    merchant_reference = models.CharField(max_length=200, blank=True)
 
     class Meta:
         ordering = ("-created",)
