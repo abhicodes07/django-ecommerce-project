@@ -9,7 +9,6 @@ class BillingAddressForm(forms.Form):
         label="Customer Name",
         min_length=4,
         max_length=150,
-        required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "input w-full",
@@ -21,7 +20,6 @@ class BillingAddressForm(forms.Form):
     email = forms.EmailField(
         label="Email (optional)",
         max_length=100,
-        required=False,
         widget=forms.EmailInput(
             attrs={
                 "class": "input w-full",
@@ -32,7 +30,6 @@ class BillingAddressForm(forms.Form):
     address = forms.CharField(
         label="Address line 1",
         max_length=200,
-        required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "input w-full",
@@ -104,7 +101,6 @@ class BillingAddressForm(forms.Form):
     card_number = forms.CharField(
         label="Card Number",
         max_length=19,
-        required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "input w-full",
@@ -116,7 +112,6 @@ class BillingAddressForm(forms.Form):
     cvv = forms.CharField(
         label="CVV",
         max_length=3,
-        required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "input w-full",
@@ -128,7 +123,6 @@ class BillingAddressForm(forms.Form):
     expiry_month = forms.CharField(
         label="Month",
         max_length=2,
-        required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "input w-20",
@@ -140,7 +134,6 @@ class BillingAddressForm(forms.Form):
     expiry_year = forms.CharField(
         label="Year",
         max_length=2,
-        required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "input w-20",
@@ -152,7 +145,6 @@ class BillingAddressForm(forms.Form):
     card_holder_name = forms.CharField(
         label="Holder Name",
         max_length=120,
-        required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "input w-full",

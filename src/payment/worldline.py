@@ -74,8 +74,8 @@ class WorldLineService:
                         "houseNumber": "3",
                         "zip": 1938,
                     },
-                    "contactDetails": {"emailAddress": "Dwight@gmail.com"},
-                    "personalInformation": {"firstName": "Dwight"},
+                    "contactDetails": {"emailAddress": user["email"]},
+                    "personalInformation": {"firstName": user["name"]},
                 },
                 "references": {
                     "merchantReference": f"order-{user['id'] or 'guest'}-{str(uuid.uuid4())[:8]}"
@@ -84,10 +84,10 @@ class WorldLineService:
             "cardPaymentMethodSpecificInput": {
                 "paymentProductId": 1,
                 "card": {
-                    "cardholderName": "Dwight",
-                    "cardNumber": "4874970686672022",
-                    "cvv": "123",
-                    "expiryDate": "1227",
+                    "cardholderName": card["card_holder_name"],
+                    "cardNumber": card["card_name"],
+                    "cvv": card["cvv"],
+                    "expiryDate": card["expiry_date"],
                 },
                 "threeDSecure": {
                     "authenticationFlow": "browser",
