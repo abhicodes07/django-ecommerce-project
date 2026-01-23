@@ -30,6 +30,7 @@ Bookstore
 
 <section class="w-full rounded-4xl bg-base-200">
   <div class="p-8 justify-center gap-4 flex flex-wrap">
+    {% if products %}
     {% for p in product %}
     <div class="card bg-base-100 justify-center w-96 shadow-sm">
       <figure class="px-10 pt-10">
@@ -51,6 +52,9 @@ Bookstore
       </div>
     </div>
     {% endfor %}
+    {% else %}
+    <div class="text-xl">There are currently no products active!</div>
+    {% endif %}
   </div>
 </section>
 {% endblock %}

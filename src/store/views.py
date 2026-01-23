@@ -12,7 +12,7 @@ def product_all(request):
     product = Product.products.all()
     background = Background.objects.first()
     context = {"product": product, "background": background}
-    return render(request, "store/home.html", context=context)
+    return render(request, "store/index.html", context=context)
 
 
 def product_detail(request, slug):
@@ -25,7 +25,7 @@ def product_detail(request, slug):
 
 def category_list(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
-    product = Product.objects.filter(category=category)
+    product = Product.products.filter(category=category)
     context = {
         "category": category,
         "product": product,
