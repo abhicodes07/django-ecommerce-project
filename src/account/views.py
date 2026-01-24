@@ -17,7 +17,7 @@ from orders.views import user_orders
 @login_required
 def dashboard(request):
     orders = user_orders(request)
-    return render(request, "account/user/dashboard.html", {"orders": orders})
+    return render(request, "account/dashboard/dashboard.html", {"orders": orders})
 
 
 # account registration view
@@ -76,7 +76,7 @@ def account_activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return redirect("account:dashboard")
+        return redirect("account:")
     else:
         # if the activation fails
         return render(request, "account/registration/activation_invalid.html")
@@ -94,7 +94,7 @@ def edit_details(request):
         user_form = UserEditForm(instance=request.user)
 
     return render(
-        request, "account/registration/edit_details.html", {"user_form": user_form}
+        request, "account/dashboard/edit_details.html", {"user_form": user_form}
     )
 
 

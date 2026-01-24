@@ -12,7 +12,7 @@ urlpatterns = [
     path(
         "login/",
         auth_views.LoginView.as_view(
-            template_name="account/registration/login.html",
+            template_name="account/login.html",
             form_class=UserLoginForm,
         ),
         name="login",
@@ -32,9 +32,9 @@ urlpatterns = [
     path(
         "password_reset/",
         auth_views.PasswordResetView.as_view(
-            template_name="account/user/password_reset_form.html",
+            template_name="account/password_reset/password_reset_form.html",
             success_url="password_reset_email_confirm",
-            email_template_name="account/user/password_reset_email.html",
+            email_template_name="account/password_reset/password_reset_email.html",
             form_class=PwdResetForm,
         ),
         name="pwdreset",
@@ -42,14 +42,14 @@ urlpatterns = [
     # link for successful email sent for password reset
     path(
         "password_reset/password_reset_email_confirm/",
-        TemplateView.as_view(template_name="account/user/reset_status.html"),
+        TemplateView.as_view(template_name="account/password_reset/reset_status.html"),
         name="password_reset_done",
     ),
     # link in email for reset containing uidb64 and token
     path(
         "password_reset_confirm/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(
-            template_name="account/user/password_reset_confirm.html",
+            template_name="account/password_reset/password_reset_confirm.html",
             success_url=reverse_lazy("account:password_reset_complete"),
             form_class=PwdResetConfirmForm,
         ),
@@ -68,7 +68,7 @@ urlpatterns = [
     path("profile/delete_user/", views.delete_user, name="delete_user"),
     path(
         "profile/delete_confirm/",
-        TemplateView.as_view(template_name="account/user/delete_confirm.html"),
+        TemplateView.as_view(template_name="account/dashboard/delete_confirm.html"),
         name="delete_confirmation",
     ),
 ]
