@@ -1,17 +1,19 @@
 # Initial and simple config for Worldline
 
-from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_exempt
-from .forms import BillingAddressForm
-from basket.basket import Basket
 from django.conf import settings
-from onlinepayments.sdk.factory import Factory
-from onlinepayments.sdk.domain.create_payment_request import CreatePaymentRequest
-from onlinepayments.sdk.domain.browser_data import BrowserData
-from onlinepayments.sdk.domain.customer_device import CustomerDevice
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from onlinepayments.sdk.domain.browser_data import BrowserData
+from onlinepayments.sdk.domain.create_payment_request import CreatePaymentRequest
+from onlinepayments.sdk.domain.customer_device import CustomerDevice
+from onlinepayments.sdk.factory import Factory
+
+from basket.basket import Basket
+
+from .forms import BillingAddressForm
 
 
 # Worldine payment integration

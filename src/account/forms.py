@@ -4,6 +4,7 @@ from django.contrib.auth.forms import (
     PasswordResetForm,
     SetPasswordForm,
 )
+
 from .models import UserBase
 
 

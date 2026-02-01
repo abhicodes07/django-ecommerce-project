@@ -1,9 +1,11 @@
-from django.conf import settings
-from onlinepayments.sdk.domain.create_payment_request import CreatePaymentRequest
-from onlinepayments.sdk.domain.browser_data import BrowserData
-from onlinepayments.sdk.domain.customer_device import CustomerDevice
-from .client import get_worldline_client
 import uuid
+
+from django.conf import settings
+from onlinepayments.sdk.domain.browser_data import BrowserData
+from onlinepayments.sdk.domain.create_payment_request import CreatePaymentRequest
+from onlinepayments.sdk.domain.customer_device import CustomerDevice
+
+from .client import get_worldline_client
 
 
 # Worldine payment integration

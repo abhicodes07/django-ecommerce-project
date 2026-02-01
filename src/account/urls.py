@@ -1,9 +1,11 @@
+from django.contrib.auth import views as auth_views
 from django.urls import path, reverse_lazy
 from django.views.generic import TemplateView
-from . import views
+
 from core.settings import LOGIN_URL
-from .forms import UserLoginForm, PwdResetForm, PwdResetConfirmForm
-from django.contrib.auth import views as auth_views
+
+from . import views
+from .forms import PwdResetConfirmForm, PwdResetForm, UserLoginForm
 
 # better access urls using namespace
 app_name = "account"
