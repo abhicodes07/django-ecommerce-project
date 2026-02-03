@@ -30,7 +30,11 @@ Basket Summary
         <tr data-index="{{ product.id }}" class="product-item">
           <td>
             <figure>
-              <img src="{{ product.image.url }}" alt="{{ product.slug }}">
+              {% for image in product.product_image.all %}
+              {% if image.is_feature %}
+              <img src="{{ image.image.url }}" alt="{{ image.alt_text }}">
+              {% endif %}
+              {% endfor %}
             </figure>
           </td>
           <td class="grid grid-cols-1 gap-2">
@@ -40,7 +44,6 @@ Basket Summary
                 <span class="badge badge-accent text-[10px]">{{ product.category }}</span>
               </h1>
             </div>
-            <span class="badge badge-success text-base badge-outline">{{ product.author }}</span>
             <p>{{ product.description }}</p>
             <div class="flex flex-wrap gap-1 justify-between">
               <div class="flex flex-wrap gap-2">

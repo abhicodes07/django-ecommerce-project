@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "account",
     "payment",
     "orders",
+    "mptt",
 ]
 
 # Tailwind config

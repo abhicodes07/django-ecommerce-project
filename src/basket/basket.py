@@ -32,7 +32,7 @@ class Basket:
             self.basket[product_id]["qty"] = qty
         else:
             self.basket[product_id] = {
-                "price": str(product.price),
+                "price": str(product.regular_price),
                 "qty": int(qty),
             }
 
@@ -53,7 +53,7 @@ class Basket:
         # print(f"PRODUCT IDS: {product_ids}")
 
         # query to get all the data associated with products
-        products = Product.products.filter(id__in=product_ids)
+        products = Product.objects.filter(id__in=product_ids)
         # print(f"PRODUCTS: {products}")
 
         # copy the instance of basket in order to update

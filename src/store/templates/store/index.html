@@ -36,14 +36,20 @@ Bookstore
     {% for p in product %}
     <div class="card bg-base-100 justify-center w-96 shadow-sm">
       <figure class="px-10 pt-10">
-        <img src="{{ p.image.url }}" alt="Shoes" class="rounded-xl" />
+
+        {% for image in p.product_image.all %}
+        {% if image.is_feature %}
+        <img src="{{ image.image.url }}" alt="image.image.alt_text" class="rounded-xl" />
+        {% endif %}
+        {% endfor %}
+
       </figure>
       <div class="card-body">
         <h1 class="font-bold text-lg flex justify-between w-full">
           <a href="{{ p.get_absolute_url }}">
             {{ p.title|title }}
           </a>
-          <span>${{ p.price }}</span>
+          <span>${{ p.regular_price }}</span>
         </h1>
         <p class="line-clamp-5 text-white/50">{{ p.description }}</p>
         <div class="card-actions">
