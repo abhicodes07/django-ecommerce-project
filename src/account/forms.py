@@ -5,7 +5,43 @@ from django.contrib.auth.forms import (
     SetPasswordForm,
 )
 
-from .models import UserBase
+from .models import Customer, Address
+
+
+class UserAddressForm(forms.ModelForm):
+    """User address form"""
+
+    class Meta:
+        model = Address
+        fields = [
+            "full_name",
+            "phone",
+            "address_line",
+            "address_line2",
+            "town_city",
+            "postcode",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["full_name"].widget.attrs.update(
+            {"class": "input w-full", "placeholder": "Full Name"}
+        )
+        self.fields["phone"].widget.attrs.update(
+            {"class": "input w-full", "placeholder": "Phone"}
+        )
+        self.fields["address_line"].widget.attrs.update(
+            {"class": "input w-full", "placeholder": "Address 1"}
+        )
+        self.fields["address_line2"].widget.attrs.update(
+            {"class": "input w-full", "placeholder": "Address 2"}
+        )
+        self.fields["town_city"].widget.attrs.update(
+            {"class": "input w-full", "placeholder": "Town City"}
+        )
+        self.fields["postcode"].widget.attrs.update(
+            {"class": "input w-full", "placeholder": "Postal code"}
+        )
 
 
 class RegistrationForm(forms.ModelForm):
@@ -26,9 +62,9 @@ class RegistrationForm(forms.ModelForm):
     password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput)
 
     class Meta:
-        model = UserBase
+        model = Customer
         fields = (
-            "user_name",
+            "name",
             "email",
         )
 
@@ -37,9 +73,9 @@ class RegistrationForm(forms.ModelForm):
         user_name = self.cleaned_data["user_name"].lower()
 
         # access user table and match if the username that user entered
-        # matches with the usernames in users table form UserBase
+        # matches with the usernames in users table form Customer
         # if the count is 1 then raise error else return the username
-        r = UserBase.objects.filter(user_name=user_name)
+        r = Customer.objects.filter(user_name=user_name)
         if r.count():
             raise forms.ValidationError("Username already exists!")
         return user_name
@@ -52,7 +88,7 @@ class RegistrationForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"]
-        if UserBase.objects.filter(email=email).exists():
+        if Customer.objects.filter(email=email).exists():
             raise forms.ValidationError(
                 "Email already exists! Please use another email or Login."
             )
@@ -136,7 +172,7 @@ class UserEditForm(forms.ModelForm):
     )
 
     class Meta:
-        model = UserBase
+        model = Customer
         fields = (
             "user_name",
             "email",
@@ -164,7 +200,7 @@ class PwdResetForm(PasswordResetForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"]
-        u = UserBase.objects.filter(email=email)
+        u = Customer.objects.filter(email=email)
         if not u:
             raise forms.ValidationError(
                 "Unfortunately we cannot find the email address"

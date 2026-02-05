@@ -5,15 +5,84 @@ Dashboard
 {% endblock %}
 
 {% block content %}
-<div class="md:mx-25 md:my-10 mx-10 my-5">
-  <div class="items-center">
-    <div class="flex flex-col gap-4 border-b-2 pb-2">
-      <h1 class="md:text-4xl text-2xl text-bold">Your Dashboard</h1>
-      <div class="flex justify-between flex-wrap">
-        <p>Manage your <b>orders</b> and personal details.</p>
-        <a href="{% url 'account:edit_details' %}" class="link-neutral border-b-1 border-neutral">change details</a>
+
+<div class="container mx-auto px-4 py-8 max-w-5xl">
+
+  <h1 class="text-3xl font-bold mb-12 text-center md:text-left">My Account Dashboard</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+
+    <!-- Card 1: Addresses -->
+    <div
+      class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-base-200 hover:border-primary group">
+      <div class="card-body items-center text-center">
+        <div class="text-5xl mb-4 text-primary opacity-80 group-hover:opacity-100 transition-opacity">
+          <!-- DaisyUI heroicons style icon (or use your own SVG / font icon) -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        <h2 class="card-title text-2xl mb-2">Manage Addresses</h2>
+        <p class="text-base-content/70 mb-4">Add, edit or remove your delivery addresses</p>
+        <div class="card-actions">
+          <a href="{% url 'account:addresses' %}"
+            class="btn btn-primary btn-outline group-hover:btn-primary transition-colors">
+            Go to Addresses →
+          </a>
+        </div>
       </div>
     </div>
+
+    <!-- Card 2: Orders -->
+    <a href="{% url 'orders:orders' %}"
+      class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-base-200 hover:border-primary group">
+      <div class="card-body items-center text-center">
+        <div class="text-5xl mb-4 text-primary opacity-80 group-hover:opacity-100 transition-opacity">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          </svg>
+        </div>
+        <h2 class="card-title text-2xl mb-2">Your Orders</h2>
+        <p class="text-base-content/70 mb-4">View order history, status and details</p>
+        <div class="card-actions">
+          <span class="btn btn-primary btn-outline group-hover:btn-primary transition-colors">
+            View Orders →
+          </span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Card 3: Account Settings -->
+    <a href="{% url 'account:edit_details' %}"
+      class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-base-200 hover:border-primary group">
+      <div class="card-body items-center text-center">
+        <div class="text-5xl mb-4 text-primary opacity-80 group-hover:opacity-100 transition-opacity">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        <h2 class="card-title text-2xl mb-2">Account Settings</h2>
+        <p class="text-base-content/70 mb-4">Update profile, change password, delete account</p>
+        <div class="card-actions">
+          <span class="btn btn-primary btn-outline group-hover:btn-primary transition-colors">
+            Manage Account →
+          </span>
+        </div>
+      </div>
+    </a>
+
   </div>
+
 </div>
+
 {% endblock %}
