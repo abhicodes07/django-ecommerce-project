@@ -41,15 +41,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "store",
+    "apps.store",
     "tailwind",
     "theme",
     "django_browser_reload",
-    "basket",
-    "account",
-    "payment",
-    "orders",
-    "mptt",
+    # "basket",
+    # "account",
+    # "payment",
+    # "orders",
+    # "mptt",
 ]
 
 # Tailwind config
@@ -75,15 +75,15 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": ["templates"],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "store.context_processors.categories",
-                "basket.context_processors.basket",
+                # "apps.store.context_processors.categories",
+                # "basket.context_processors.basket",
             ],
         },
     },
@@ -150,7 +150,7 @@ MEDIA_URL = os.path.join(BASE_DIR, "media/")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Custom user model
-AUTH_USER_MODEL = "account.Customer"
+# AUTH_USER_MODEL = "account.Customer"
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/account/login/"
 
