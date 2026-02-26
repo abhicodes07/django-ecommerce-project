@@ -24,8 +24,8 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("account/", include("apps.account.urls", namespace="account")),
     # path("basket/", include("basket.urls", namespace="basket")),
-    # path("account/", include("account.urls", namespace="account")),
     # path("payment/", include("payment.urls", namespace="payment")),
     # path("orders/", include("orders.urls", namespace="orders")),
     path("", include("apps.store.urls", namespace="store")),

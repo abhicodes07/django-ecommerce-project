@@ -41,12 +41,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "apps.store",
     "tailwind",
     "theme",
     "django_browser_reload",
+    "apps.store",
+    "apps.account",
     # "basket",
-    # "account",
     # "payment",
     # "orders",
     # "mptt",
@@ -150,7 +150,7 @@ MEDIA_URL = os.path.join(BASE_DIR, "media/")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Custom user model
-# AUTH_USER_MODEL = "account.Customer"
+AUTH_USER_MODEL = "account.Customer"
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/account/login/"
 
