@@ -6,8 +6,8 @@ dist/
 wheels/
 *.egg-info
 
-# Virtual environments
-.venv
+# # Virtual environments
+# .venv
 
 # Python
 *.pyc
@@ -45,9 +45,6 @@ tailwind.config.js
 postcss.config.js
 package-lock.json
 yarn.lock
-
-# Compiled CSS (optional — if built locally)
-assets/
 
 # NPM build artifacts (optional if using django-tailwind)
 theme/static/css/

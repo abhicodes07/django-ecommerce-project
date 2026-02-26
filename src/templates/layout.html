@@ -62,8 +62,7 @@
 
     <div class="gap-2 navbar-end flex">
       <input type="text" placeholder="Search " class="input input-bordered w-24 md:w-auto" />
-      <a href="{% comment %} {% url 'basket:basket_summary' %} {% endcomment %}"
-        class="relative gap-2 rounded-full p-1 px-2 items-center">
+      <a href="{% url 'basket:basket_summary' %}" class="relative gap-2 rounded-full p-1 px-2 items-center">
         {% with total_qty=basket|length %}
         <span class="rounded-full px-1 text-xs bg-red-600/70 absolute top-0 right-0" id="qty-basket">
           {% if total_qty > 0 %}
@@ -101,7 +100,7 @@
         </ul>
       </div>
       {% else %}
-      <a class="btn btn-primary rounded-full" href="{% comment %} {% url 'account:login' %}{% endcomment %}">
+      <a class="btn btn-primary rounded-full" href="{% url 'account:login' %}">
         Login
       </a>
       {% endif %}

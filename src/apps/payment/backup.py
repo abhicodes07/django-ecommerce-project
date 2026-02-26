@@ -11,7 +11,7 @@ from onlinepayments.sdk.domain.create_payment_request import CreatePaymentReques
 from onlinepayments.sdk.domain.customer_device import CustomerDevice
 from onlinepayments.sdk.factory import Factory
 
-from basket.basket import Basket
+from apps.basket.basket import Basket
 
 from .forms import BillingAddressForm
 

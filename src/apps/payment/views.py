@@ -6,8 +6,8 @@ from django.views.decorators.http import require_http_methods, require_POST
 from onlinepayments.sdk.communication.request_header import RequestHeader
 from onlinepayments.sdk.domain.capture_payment_request import CapturePaymentRequest
 
-from basket.basket import Basket
-from orders.models import Order, OrderItem
+from apps.basket.basket import Basket
+from apps.orders.models import Order, OrderItem
 
 from .client import get_worldline_client
 from .forms import BillingAddressForm

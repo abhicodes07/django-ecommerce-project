@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-from basket.basket import Basket
-from orders.models import Order
+from apps.basket.basket import Basket
+from .models import Order
 
 
 # Create your views here.

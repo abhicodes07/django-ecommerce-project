@@ -46,10 +46,10 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "apps.store",
     "apps.account",
-    # "basket",
-    # "payment",
-    # "orders",
-    # "mptt",
+    "apps.basket",
+    "apps.payment",
+    "apps.orders",
+    "mptt",
 ]
 
 # Tailwind config
@@ -82,8 +82,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # "apps.store.context_processors.categories",
-                # "basket.context_processors.basket",
+                "apps.store.context_processors.categories",
+                "apps.basket.context_processors.basket",
             ],
         },
     },

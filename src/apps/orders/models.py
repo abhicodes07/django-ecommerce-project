@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.template.defaultfilters import default
-from store.models import Product
+from apps.store.models import Product
 
 
 # Create your models here.

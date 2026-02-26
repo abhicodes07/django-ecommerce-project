@@ -1,11 +1,9 @@
-{% extends "store/layout.html" %}
+{% extends "layout.html" %}
 
 {% block title %}
 Payment - Failed
 {% endblock %}
 
 {% block content %}
-<h1>Payment Failed</h1>
-{{ error }}
-{{ status }}
+<h1>Response Failure: {{ error }}</h1>
 {% endblock %}
