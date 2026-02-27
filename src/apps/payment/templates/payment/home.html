@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+{% block title %}
+Payment
+{% endblock %}
+
+{% block content %}
+<section class="flex items-center w-full justify-center">
+  <form class="fieldset bg-base-200 border-base-300 rounded-box lg:w-xl w-auto border p-4" method="POST">
+    {% csrf_token %}
+
+    <input type="hidden" name="screen_height" id="screen_height">
+    <input type="hidden" name="screen_width" id="screen_width">
+    <input type="hidden" name="color_depth" id="color_depth">
+    <input type="hidden" name="timezone_offset" id="timezone_offset">
+
+
+    {% if form.errors %}
+    <div role="alert" class="alert alert-error alert-soft">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{ form.errors }}</span>
+    </div>
+    {% endif %}
+
+    <fieldset class="fieldset">
+      <label for="{{ form.name.id_for_label }}" class="label">{{ form.name.label }}</label>
+      {{ form.name }}
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <label for="{{ form.email.id_for_label }}" class="label">{{ form.email.label }}</label>
+      {{ form.email }}
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <label for="{{ form.address.id_for_label }}" class="label">{{ form.address.label }}</label>
+      {{ form.address }}
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <label for="{{ form.address2.id_for_label }}" class="label">{{ form.address2.label }}</label>
+      {{ form.address2 }}
+    </fieldset>
+
+    <fieldset class="fieldset flex justify-between">
+      <div class="grid">
+        <label for="{{ form.country.id_for_label }}" class="label">{{ form.country.label }}</label>
+        {{ form.country }}
+      </div>
+
+      <div>
+        <label for="{{ form.state.id_for_label }}" class="label">{{ form.state.label }}</label>
+        {{ form.state }}
+      </div>
+
+      <div>
+        <label for="{{ form.postal_code.id_for_label }}" class="label">{{ form.postal_code.label }}</label>
+        {{ form.postal_code }}
+      </div>
+    </fieldset>
+
+    <fieldset class="bg-base-100 p-4 rounded-lg">
+      <legend class="fieldset-legend">Card details</legend>
+      <fieldset class="fieldset">
+        <label for="{{ form.card_holder_name.id_for_label }}" class="label">{{ form.card_holder_name.label }}</label>
+        {{ form.card_holder_name }}
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <label for="{{ form.card_number.id_for_label }}" class="label">{{ form.card_number.label }}</label>
+        {{ form.card_number }}
+      </fieldset>
+
+      <div class="flex flex-wrap justify-between">
+        <fieldset class="fieldset">
+          <label for="{{ form.cvv.id_for_label }}" class="label">{{ form.cvv.label }}</label>
+          {{ form.cvv }}
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <label for="{{ form.expiry_month.id_for_label }}" class="label">{{ form.expiry_month.label }}</label>
+          {{ form.expiry_month }}
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <label for="{{ form.expiry_year.id_for_label }}" class="label">{{ form.expiry_year.label }}</label>
+          {{ form.expiry_year }}
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <label for="{{ form.currency.id_for_label }}" class="label">{{ form.currency.label }}</label>
+          {{ form.currency }}
+        </fieldset>
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn btn-primary py-2 pay-button">Pay</button>
+  </form>
+</section>
+
+<script>
+  // Set values immediately when page loads (best practice for 3DS)
+  document.getElementById('screen_height').value = screen.height || 0;
+  document.getElementById('screen_width').value = screen.width || 0;
+  document.getElementById('color_depth').value = screen.colorDepth || 0;
+  document.getElementById('timezone_offset').value = new Date().getTimezoneOffset() || 0;
+
+  // Optional safety: update again right before submit
+  document.querySelector('form').addEventListener('submit', function () {
+    document.getElementById('screen_height').value = screen.height || 0;
+    document.getElementById('screen_width').value = screen.width || 0;
+    document.getElementById('color_depth').value = screen.colorDepth || 0;
+    document.getElementById('timezone_offset').value = new Date().getTimezoneOffset() || 0;
+  }, {capture: true});  // capture: true = runs early in submit phase
+
+  console.log(document.getElementById('timezone_offset').value)
+  console.log(document.getElementById('screen_width').value)
+  console.log(document.getElementById('screen_height').value)
+  console.log(document.getElementById('color_depth').value)
+  console.log("hello there")
+</script>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}
+Basket Summary
+{% endblock %}
+
+{% block content %}
+<section class="md:mx-20 mx-auto my-5">
+  <div class="overflow-x-auto rounded-box border-2 border-base-100/50 bg-base-200">
+    {% if basket|length == 0 %}
+    <div class="text-center">
+      Your basket is empty!
+    </div>
+    {% else %}
+    <table class="table">
+      <!--Head-->
+      <thead class="md:table-header-group hidden">
+        <tr>
+          <th>Image</th>
+          <th>Product</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <!--Body-->
+      <tbody>
+        <!--Row 1-->
+        {% for item in basket %}
+        {% with product=item.product %}
+        <tr data-index="{{ product.id }}" class="product-item">
+          <td>
+            <figure>
+              {% for image in product.product_image.all %}
+              {% if image.is_feature %}
+              <img src="{{ image.image.url }}" alt="{{ image.alt_text }}">
+              {% endif %}
+              {% endfor %}
+            </figure>
+          </td>
+          <td class="grid grid-cols-1 gap-2">
+            <div class="md:items-center">
+              <h1 class="sm:flex-row sm:items-center flex-col items-start card-title font-bold text-xl">
+                {{ product.title|title }}
+                <span class="badge badge-accent text-[10px]">{{ product.category }}</span>
+              </h1>
+            </div>
+            <p>{{ product.description }}</p>
+            <div class="flex flex-wrap gap-1 justify-between">
+              <div class="flex flex-wrap gap-2">
+                <button class="btn btn-outline btn-secondary update-button md:w-auto w-full"
+                  data-index="{{ product.id }}" id="update-button">Update</button>
+                <button class="btn btn-primary delete-button md:w-auto w-full" id="delete-button"
+                  data-index="{{ product.id }}">Delete</button>
+              </div>
+              <select id="select{{product.id}}" class="select select-info focus:outline-none md:w-auto w-full">
+                <option selected>{{ item.qty }}</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+              </select>
+            </div>
+          </td>
+          <td class="">
+            <span class="text-xl">${{ item.total_price }}</span>
+          </td>
+        </tr>
+        {% endwith %}
+        {% endfor %}
+        <tr class="border-t-2 border-base">
+          <td></td>
+          <td class="text-xl border-r-2 border-base">Total</td>
+          <td class="text-xl" id="subtotal">${{ basket.get_total_price }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="flex justify-end bg-base-100 w-full">
+      <a href="{% url 'payment:create_payment' %}"
+        class="rounded-box rounded-tl-none rounded-bl-none rounded-tr-none btn btn-success md:min-w-xl">Checkout <span
+          class="material-symbols-outlined">payments</span></a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!--TODO: Although we are successfully deleting an item from the basket
+          with out refreshing the page using AJAX but the total price still
+          remains unaffected and needs page to be refreshed to show the actual price.
+          Use ajax to solve this.-->
+<script>
+  //delete item
+  $(document).on('click', '.delete-button', function (e) {
+    e.preventDefault();
+    var prod_id = $(this).data('index');
+    $.ajax({
+      type: 'POST',
+      url: '{% url "basket:basket_delete" %}',
+      data: {
+        productid: $(this).data('index'),
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+        action: 'post'
+      },
+      success: function (json) {
+        console.log(prod_id)
+        $('.product-item[data-index="' + prod_id + '"]').remove();
+        document.getElementById("qty-basket").innerHTML = json.qty
+        document.getElementById("subtotal").innerHTML = json.subtotal
+      },
+      error: function (xhr, errmsg, err) { }
+    });
+  })
+
+  // update item
+  $(document).on('click', '.update-button', function (e) {
+    e.preventDefault();
+    var prod_id = $(this).data('index');
+    $.ajax({
+      type: 'POST',
+      url: '{% url "basket:basket_update" %}',
+      data: {
+        productid: $(this).data('index'),
+        productqty: $('#select' + prod_id + ' option:selected').text(),
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+        action: 'post'
+      },
+      success: function (json) {
+        document.getElementById("qty-basket").innerHTML = json.qty
+        document.getElementById("subtotal").innerHTML = json.subtotal
+      },
+      error: function (xhr, errmsg, err) { }
+    });
+  })
+
+</script>
+{% endblock %}

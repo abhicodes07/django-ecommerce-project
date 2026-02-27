@@ -41,14 +41,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "store",
     "tailwind",
     "theme",
     "django_browser_reload",
-    "basket",
-    "account",
-    "payment",
-    "orders",
+    "apps.store",
+    "apps.account",
+    "apps.basket",
+    "apps.payment",
+    "apps.orders",
     "mptt",
 ]
 
@@ -75,15 +75,15 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": ["templates"],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "store.context_processors.categories",
-                "basket.context_processors.basket",
+                "apps.store.context_processors.categories",
+                "apps.basket.context_processors.basket",
             ],
         },
     },
