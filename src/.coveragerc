@@ -1,0 +1,18 @@
+# omit unnecessary files
+# when running coverage
+[run]
+omit =
+    *venv/*
+    conftest.py
+    *tests*
+    *settings.py*
+    *.git*
+
+[report]
+omit =
+    *venv/*
+    conftest.py
+    *__init__.py*
+    *tests*
+    *settings.py*
+    *.git*

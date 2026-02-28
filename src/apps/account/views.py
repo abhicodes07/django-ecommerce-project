@@ -61,6 +61,8 @@ def account_register(request):
             email.attach_alternative(message, "text/html")
             email.send()
             return HttpResponse("Registered successfully and activation sent!")
+        else:
+            return HttpResponseRedirect("Error handler content", status=400)
 
     else:
         registerForm = RegistrationForm()
@@ -127,6 +129,8 @@ def add_address(request):
             address_form.customer = request.user
             address_form.save()
             return HttpResponseRedirect(reverse("account:addresses"))
+        else:
+            return HttpResponseRedirect("Error handler content", status=400)
     else:
         address_form = UserAddressForm()
     return render(

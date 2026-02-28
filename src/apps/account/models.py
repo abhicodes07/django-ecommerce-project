@@ -5,13 +5,20 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.db import models
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from django_countries import Countries
 
 # Create your models here.
 
 
 class CustomAccountManager(BaseUserManager):
+    def validate_user_email(self, email):
+        try:
+            validate_email(email)
+        except ValidationError:
+            raise ValueError(_("You must provide an email address"))
+
     def create_superuser(self, email, name, password, **other_fields):
         other_fields.setdefault("is_staff", True)
         other_fields.setdefault("is_superuser", True)
@@ -23,11 +30,20 @@ class CustomAccountManager(BaseUserManager):
         if other_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must be assigned to is_superuser=True.")
 
+        if email:
+            email = self.normalize_email(email)
+            self.validate_user_email(email)
+        else:
+            raise ValueError(_("Superuser Account: You must provide an email address."))
+
         return self.create_user(email, name, password, **other_fields)
 
     def create_user(self, email, name, password, **other_fields):
-        if not email:
-            raise ValueError(_("You must provide an email address"))
+        if email:
+            email = self.normalize_email(email)
+            self.validate_user_email(email)
+        else:
+            raise ValueError(_("Customer Account: You must provide an email address."))
 
         # check if email is formatted correctly
         email = self.normalize_email(email)
@@ -91,4 +107,4 @@ class Address(models.Model):
         verbose_name_plural = "Addresses"
 
     def __str__(self):
-        return "Address"
+        return "{} Address".format(self.full_name)
