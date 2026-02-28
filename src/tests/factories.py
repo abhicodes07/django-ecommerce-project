@@ -1,20 +1,24 @@
 import factory
+from faker import Faker
 from mptt import models
+
+from apps.account.models import Address, CustomAccountManager, Customer
 from apps.store.models import (
     Category,
-    ProductType,
-    ProductSpecification,
     Product,
+    ProductSpecification,
     ProductSpecificationValue,
+    ProductType,
 )
-from faker import Faker
 
 fake = Faker()
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Store
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 # Store factory
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 class CategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Category
@@ -23,9 +27,7 @@ class CategoryFactory(factory.django.DjangoModelFactory):
     slug = "django"
 
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Product Type factory
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 class ProductTypeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ProductType
@@ -36,9 +38,7 @@ class ProductTypeFactory(factory.django.DjangoModelFactory):
     name = "book"
 
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Product Type factory
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 class ProductSpecificationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ProductSpecification
@@ -49,9 +49,7 @@ class ProductSpecificationFactory(factory.django.DjangoModelFactory):
     name = "pages"
 
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Product factory
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 class ProductFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Product
@@ -65,9 +63,7 @@ class ProductFactory(factory.django.DjangoModelFactory):
     discount_price = "9.99"
 
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Product Type factory
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 class ProductSpecificationValueFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ProductSpecificationValue
@@ -75,3 +71,43 @@ class ProductSpecificationValueFactory(factory.django.DjangoModelFactory):
     product = factory.SubFactory(ProductFactory)
     specification = factory.SubFactory(ProductSpecificationFactory)
     value = "100"
+
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Account
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+# Customer factory
+class CustomerFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Customer
+
+    email = "a@a.com"
+    name = "user1"
+    mobile = "1234567890"
+    password = "tester"
+    is_active = True
+    is_staff = False
+
+    @classmethod
+    def _create(cls, model_class, *args, **kwargs):
+        manager = cls._get_manager(model_class)
+        if "is_superuser" in kwargs:
+            return manager.create_superuser(*args, **kwargs)
+        else:
+            return manager.create_user(*args, **kwargs)
+
+
+# Address factory
+class AddressFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Address
+
+    customer = factory.SubFactory(CustomerFactory)
+    full_name = fake.name()
+    phone = fake.phone_number()
+    postcode = fake.postalcode_in_state()
+    address_line = fake.street_address()
+    address_line2 = fake.street_address()
+    town_city = fake.city_suffix()
